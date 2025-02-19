@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, FormEvent, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { baseUrl } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -31,9 +31,14 @@ const Register = () => {
       localStorage.setItem("accessToken", res.data.token);
       route.push("/dashboard");
       toast.success("Muvaffaqiyatli ro‘yxatdan o‘tdingiz! 🎉");
-    } catch (error: any) {
-      const errorMsg = error.response?.data?.message || "Xatolik yuzaga keldi";
-      toast.error(errorMsg);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const errorMsg =
+          error.response?.data?.message || "Xatolik yuzaga keldi";
+        toast.error(errorMsg);
+      } else {
+        toast.error("Noma'lum xatolik yuz berdi");
+      }
     } finally {
       setLoading(false);
     }
