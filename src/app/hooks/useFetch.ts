@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios, { AxiosError } from "axios";
 
 function useFetch<T>(url: string) {
@@ -8,7 +8,7 @@ function useFetch<T>(url: string) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setError(null);
     setLoading(true);
     try {
@@ -20,11 +20,11 @@ function useFetch<T>(url: string) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [url]); // ✅ useCallback bilan url o‘zgarsa faqat shunda yangi funksiya yaratiladi
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]); // ✅ fetchData ni dependency qilib qo‘shdik
 
   return { data, error, loading, refetch: fetchData };
 }

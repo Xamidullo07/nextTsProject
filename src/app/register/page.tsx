@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, FormEvent } from "react";
+import { useEffect, FormEvent, useState } from "react";
 import axios from "axios";
 import { baseUrl } from "@/utils/api";
 import { useRouter } from "next/navigation";
@@ -9,31 +9,33 @@ import { toast } from "react-toastify";
 
 const Register = () => {
   const route = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("accessToken");
-      if (token) {
-        route.push("/dashboard");
-      }
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      route.push("/dashboard");
     }
   }, [route]);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const email = (form[0] as HTMLInputElement).value;
-    const password = (form[1] as HTMLInputElement).value;
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     try {
-      const res = await axios.post(`${baseUrl}/auth`, { email, password });
-      if (res.status === 200) {
-        localStorage.setItem("accessToken", res.data.token);
-        route.push("/dashboard");
-        toast.success("Muvaffaqiyatli bajarildi! 🎉");
-      }
-    } catch (error: unknown) {
-      toast.error("Xatolik yuzaga keldi");
+      const res = await axios.post(`${baseUrl}/register`, { email, password });
+      localStorage.setItem("accessToken", res.data.token);
+      route.push("/dashboard");
+      toast.success("Muvaffaqiyatli ro‘yxatdan o‘tdingiz! 🎉");
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.message || "Xatolik yuzaga keldi";
+      toast.error(errorMsg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +43,7 @@ const Register = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
       <h2 className="text-3xl font-bold mb-2">Sign Up</h2>
       <p className="text-gray-400 mb-6 flex items-center gap-1">
-        <span className="text-lg">👤Create Your Account</span>
+        <span className="text-lg">👤</span> Create Your Account
       </p>
       <form
         onSubmit={onSubmit}
@@ -49,19 +51,24 @@ const Register = () => {
       >
         <input
           type="email"
+          name="email"
+          required
           placeholder="Email Address"
           className="w-full p-3 mb-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="password"
+          name="password"
+          required
           placeholder="Password"
           className="w-full p-3 mb-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded transition"
+          disabled={loading}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded transition disabled:bg-gray-600"
         >
-          Login
+          {loading ? "Loading..." : "Register"}
         </button>
       </form>
       <p className="mt-4 text-gray-400">
