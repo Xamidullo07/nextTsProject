@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { baseUrl } from "@/utils/api";
 import axios from "axios";
+import { baseUrl } from "@/utils/api";
 
 interface UserProfile {
   _id: string;
@@ -18,7 +18,7 @@ interface UserProfile {
 
 export default function UserProfilePage() {
   const router = useRouter();
-  const { user_id } = router.query;
+  const { user_id } = useParams();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,11 +33,18 @@ export default function UserProfilePage() {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        const errorMsg =
+          err.response?.data?.message ||
+          "Profilni yuklashda xatolik yuz berdi.";
+        setError(errorMsg);
         setLoading(false);
       });
   }, [user_id]);
 
+  if (!user_id)
+    return (
+      <p className="text-center text-lg font-semibold">User ID not found</p>
+    );
   if (loading)
     return <p className="text-center text-lg font-semibold">Loading...</p>;
   if (error)
@@ -59,14 +66,6 @@ export default function UserProfilePage() {
       </button>
 
       <div className="w-full max-w-2xl bg-gray-800 shadow-md p-6 rounded-lg text-center">
-        {/* <Image
-          src={profile.avatar || `https://gravatar.com/avatar/?d=mm&r=pg&s=200`}
-          alt="User avatar"
-          width={120}
-          height={120}
-          className="rounded-full mx-auto mb-4"
-        /> */}
-
         <h3 className="text-2xl font-semibold">{profile.name}</h3>
         <p className="text-gray-400">
           {profile.status} at {profile.company}
