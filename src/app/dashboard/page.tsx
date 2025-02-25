@@ -12,7 +12,7 @@ interface User {
 
 function Dashboard() {
   const { data, error } = useFetch<{ name: string }>("auth");
-  const { data: profile, error: errorProfile } = useFetch<User>("profile/me");
+  const { data: profile } = useFetch<User>("profile/me");
   console.log(error);
 
   console.log(data);
