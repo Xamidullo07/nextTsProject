@@ -37,7 +37,7 @@ export default function CreateProfile() {
       });
 
       router.push("/developers");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error creating profile:", err);
       setError(
         err.response?.data?.message ||

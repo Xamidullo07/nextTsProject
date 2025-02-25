@@ -39,7 +39,7 @@ function Posts() {
         });
 
         setPosts(response.data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching posts:", error);
         setError(
           error.response?.data?.message ||
