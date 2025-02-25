@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { IoPerson } from "react-icons/io5";
 
 import { baseUrl } from "../../utils/api";
 import { FaRegThumbsUp, FaRegCommentDots } from "react-icons/fa";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 interface Post {
   _id: string;
@@ -39,13 +40,15 @@ function Posts() {
         });
 
         setPosts(response.data);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Error fetching posts:", error);
-        setError(
-          error.response?.data?.message ||
-            error.message ||
-            "Failed to fetch posts."
-        );
+        if (error instanceof AxiosError) {
+          const errorMsg =
+            error.response?.data?.message || "Xatolik yuzaga keldi";
+          toast.error(errorMsg);
+        } else {
+          toast.error("Noma'lum xatolik yuz berdi");
+        }
       } finally {
         setLoading(false);
       }
