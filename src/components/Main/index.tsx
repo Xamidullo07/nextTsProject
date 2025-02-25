@@ -3,7 +3,7 @@ import React from "react";
 
 function Main() {
   return (
-    <div className="relative flex items-center justify-center h-screen bg-gray-900">
+    <div className="relative flex items-center overflow-y-hidden justify-center h-screen bg-gray-900">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center brightness-50"

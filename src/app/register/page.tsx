@@ -12,7 +12,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("token");
     if (token) {
       route.push("/dashboard");
     }
@@ -28,7 +28,7 @@ const Register = () => {
 
     try {
       const res = await axios.post(`${baseUrl}/register`, { email, password });
-      localStorage.setItem("accessToken", res.data.token);
+      localStorage.setItem("token", res.data.token);
       route.push("/dashboard");
       toast.success("Muvaffaqiyatli ro‘yxatdan o‘tdingiz! 🎉");
     } catch (error: unknown) {
@@ -45,43 +45,46 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-      <h2 className="text-3xl font-bold mb-2">Sign Up</h2>
-      <p className="text-gray-400 mb-6 flex items-center gap-1">
-        <span className="text-lg">👤</span> Create Your Account
-      </p>
-      <form
-        onSubmit={onSubmit}
-        className="w-full max-w-sm bg-gray-800 p-6 rounded-lg shadow-lg"
-      >
-        <input
-          type="email"
-          name="email"
-          required
-          placeholder="Email Address"
-          className="w-full p-3 mb-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="password"
-          name="password"
-          required
-          placeholder="Password"
-          className="w-full p-3 mb-3 border border-gray-700 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded transition disabled:bg-gray-600"
-        >
-          {loading ? "Loading..." : "Register"}
-        </button>
-      </form>
-      <p className="mt-4 text-gray-400">
-        Already have an account?{" "}
-        <Link href="/login" className="text-blue-400 hover:underline">
-          Sign In
-        </Link>
-      </p>
+    <div className="relative flex items-center overflow-y-hidden justify-center h-screen bg-gray-900">
+      <div
+        className="absolute inset-0 bg-cover bg-center brightness-50"
+        style={{ backgroundImage: "url('/img.webp')" }}
+      ></div>
+      <div className="relative  z-10 text-center bg-gray-180 p-6 border rounded-xl ">
+        <h2 className="text-3xl font-bold mb-2 text-cyan-400">Sign Up</h2>
+        <span className=" text-lg text-center text-gray-400 mb-6">
+          👤 Create Your Account
+        </span>
+        <form onSubmit={onSubmit} className="w-full max-w-sm p-6 rounded-lg ">
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Email Address"
+            className="w-full p-3 mb-3 border  rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            name="password"
+            required
+            placeholder="Password"
+            className="w-full p-3 mb-3 border  rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-cyan-700 hover:bg-blue-600 text-white font-semibold py-3 rounded transition disabled:bg-gray-600"
+          >
+            {loading ? "Loading..." : "Register"}
+          </button>
+        </form>
+        <p className="mt-4 text-gray-400">
+          Already have an account?{" "}
+          <Link href="/login" className="text-cyan-400 hover:underline">
+            Sign In
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

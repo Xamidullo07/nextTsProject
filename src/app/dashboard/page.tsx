@@ -1,124 +1,92 @@
 "use client";
+import useFetch from "../../app/hooks/useFetch";
+import Link from "next/link";
+import { IoPerson } from "react-icons/io5";
 
-import React, { useState, ChangeEvent, FormEvent } from "react";
+interface User {
+  name: string;
+  email: string;
+  experience: { company: string; title: string; years: string }[];
+  education: { school: string; degree: string; years: string }[];
+}
 
-const Dashboard: React.FC = () => {
-  const [showForm, setShowForm] = useState<boolean>(false);
+function Dashboard() {
+  const { data, error } = useFetch<{ name: string }>("auth");
+  const { data: profile, error: errorProfile } = useFetch<User>("profile/me");
+  console.log(error);
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-6">
-      <h2 className="text-3xl font-bold">Dashboard</h2>
-      <p className="text-gray-400 mt-2 flex items-center gap-1">
-        <span className="text-lg">👤</span> Welcome
-      </p>
-      <p className="text-gray-400 mt-2">
-        You have not yet set up a profile, please add some info.
-      </p>
-      {!showForm ? (
-        <button
-          className="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded transition"
-          onClick={() => setShowForm(true)}
-        >
-          Create Profile
-        </button>
-      ) : (
-        <CreateProfile />
-      )}
-    </div>
-  );
-};
-
-const CreateProfile: React.FC = () => {
-  const [formData, setFormData] = useState({
-    status: "",
-    company: "",
-    website: "",
-    location: "",
-    skills: "",
-    github: "",
-    bio: "",
-  });
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Profile Data:", formData);
-  };
+  console.log(data);
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg mt-6 w-full max-w-lg">
-      <h2 className="text-2xl font-bold text-white">
-        Lets get some information to make your profile
-      </h2>
-      <p className="text-gray-400 mb-4">* = required field</p>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <select
-          name="status"
-          onChange={handleChange}
-          required
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option>* Select Professional Status</option>
-          <option value="Developer">Developer</option>
-          <option value="Junior Developer">Junior Developer</option>
-        </select>
-        <input
-          type="text"
-          name="company"
-          placeholder="Company"
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          name="website"
-          placeholder="Website"
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          name="skills"
-          placeholder="* Skills"
-          onChange={handleChange}
-          required
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          name="github"
-          placeholder="Github Username"
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <textarea
-          name="bio"
-          placeholder="A short bio of yourself"
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded transition"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+    <>
+      <div className="max-w-[800px] m-auto p-4 text-center">
+        <div>
+          <h1 className="font-bold text-start py-4 text-5xl text-[#17a2b8] pt-9">
+            Dashboard
+          </h1>
+          <div className="flex items-center py-2gap-2">
+            <IoPerson className="text-2xl" />
+            <p className="text-2xl">Welcome {data?.name || "User"}</p>
+          </div>
+          <p className="text-start py-4">
+            You have not yet set up a profile, please add some info
+          </p>
+          {profile ? (
+            <div>
+              <div>
+                <div className="flex items-center gap-4">
+                  <button className="py-2 px-4 bg-[#f4f4f4]">
+                    <Link href="/editProfile">Edit Profile</Link>
+                  </button>
+                  <button className="py-2 px-4 bg-[#f4f4f4]">
+                    <Link href="/addan">Add Experience</Link>
+                  </button>
+                  <button className="py-2 px-4 bg-[#f4f4f4]">
+                    <Link href="/edu">Add Education</Link>
+                  </button>
+                </div>
+                <h4 className="text-2xl leading-10 font-bold">
+                  Experience Credentials
+                </h4>
+                <div className="flex items-center gap-3">
+                  <p className="py-2 px-4 bg-[#f4f4f4] font-bold text-base leading-7">
+                    Company
+                  </p>
+                  <p className="py-2 px-4 bg-[#f4f4f4] font-bold text-base leading-7">
+                    Title
+                  </p>
+                  <p className="py-2 px-4 bg-[#f4f4f4] font-bold text-base leading-7">
+                    Years
+                  </p>
+                </div>
+                <h4 className="text-2xl leading-10 font-bold">
+                  Education Credentials
+                </h4>
+                <div className="flex items-center gap-3">
+                  <p className="py-2 px-4 bg-[#f4f4f4] font-bold text-base leading-7">
+                    School
+                  </p>
+                  <p className="py-2 px-4 bg-[#f4f4f4] font-bold text-base leading-7">
+                    Degree
+                  </p>
+                  <p className="py-2 px-4 bg-[#f4f4f4] font-bold text-base leading-7">
+                    Years
+                  </p>
+                </div>
+                <button className="py-2 px-4 bg-[#ff1f1f] text-white">
+                  Delete My Account
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button className="bg-[#17a2b8] py-2 text-center flex justify-center px-4 text-white">
+              <Link href="/createProfile">Create Profile</Link>
+            </button>
+          )}
+        </div>
+      </div>
+    </>
   );
-};
+}
 
 export default Dashboard;

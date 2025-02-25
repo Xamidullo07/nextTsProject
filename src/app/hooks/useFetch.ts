@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import axios, { AxiosError } from "axios";
+import { baseUrl } from "@/utils/api";
 
 function useFetch<T>(url: string) {
   const [data, setData] = useState<T | null>(null);
@@ -12,7 +13,13 @@ function useFetch<T>(url: string) {
     setError(null);
     setLoading(true);
     try {
-      const res = await axios.get<T>(url);
+      const res = await axios.get<T>(baseUrl + url, {
+        headers: {
+          "x-auth-token": `${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      });
+
       setData(res.data);
     } catch (error) {
       const err = error as AxiosError;
@@ -20,11 +27,11 @@ function useFetch<T>(url: string) {
     } finally {
       setLoading(false);
     }
-  }, [url]); // ✅ useCallback bilan url o‘zgarsa faqat shunda yangi funksiya yaratiladi
+  }, [url]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]); // ✅ fetchData ni dependency qilib qo‘shdik
+  }, [fetchData]);
 
   return { data, error, loading, refetch: fetchData };
 }

@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const checkToken = () => {
-      setToken(localStorage.getItem("accessToken"));
+      setToken(localStorage.getItem("token"));
     };
 
     checkToken();
@@ -24,14 +24,14 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setToken(localStorage.getItem("accessToken"));
+      setToken(localStorage.getItem("token"));
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const logOut = () => {
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("token");
     setToken(null);
     router.push("/");
     toast.success("Muvaffaqiyatli bajarildi!");
@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="bg-gray-800 text-white p-4 shadow-md">
+      <nav className="bg-gray-800 text-white p-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <Link
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Navigation Links */}
-          <ul className="flex space-x-6">
+          <ul className="flex items-center space-x-6">
             <li>
               <Link
                 href="/developers"
