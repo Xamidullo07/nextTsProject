@@ -6,6 +6,7 @@ import { baseUrl } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { FaUserTie } from "react-icons/fa";
 
 const Register = () => {
   const route = useRouter();
@@ -23,11 +24,16 @@ const Register = () => {
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
     try {
-      const res = await axios.post(`${baseUrl}/register`, { email, password });
+      const res = await axios.post(`${baseUrl}users`, {
+        name,
+        email,
+        password,
+      });
       localStorage.setItem("token", res.data.token);
       route.push("/dashboard");
       toast.success("Muvaffaqiyatli ro‘yxatdan o‘tdingiz! 🎉");
@@ -52,28 +58,44 @@ const Register = () => {
       ></div>
       <div className="relative  z-10 text-center bg-gray-180 p-6 border rounded-xl ">
         <h2 className="text-3xl font-bold mb-2 text-cyan-400">Sign Up</h2>
-        <span className=" text-lg text-center text-gray-400 mb-6">
-          👤 Create Your Account
+        <span className="text-lg text-center text-gray-200 mb-6 flex items-center justify-center">
+          <FaUserTie className="text-white mr-2" size={16} />
+          Create Your Account
         </span>
         <form onSubmit={onSubmit} className="w-full max-w-sm p-6 rounded-lg ">
+          <input
+            type="name"
+            name="name"
+            required
+            placeholder="Name"
+            className="w-full p-3 mb-3 border  rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
           <input
             type="email"
             name="email"
             required
             placeholder="Email Address"
-            className="w-full p-3 mb-3 border  rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 mb-3 border  rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="password"
             name="password"
             required
             placeholder="Password"
-            className="w-full p-3 mb-3 border  rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 mb-3 border  rounde focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="password"
+            name="confirmPassword"
+            required
+            placeholder="Confirm Password"
+            className="w-full p-3 mb-3 border  rounde focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-cyan-700 hover:bg-blue-600 text-white font-semibold py-3 rounded transition disabled:bg-gray-600"
+            className="w-full bg-cyan-700 hover:bg-cyan-600 text-white font-semibold py-3 rounded transition disabled:bg-gray-600"
           >
             {loading ? "Loading..." : "Register"}
           </button>

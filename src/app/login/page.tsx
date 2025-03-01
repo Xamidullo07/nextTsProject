@@ -6,6 +6,7 @@ import { baseUrl } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { FaUserTie } from "react-icons/fa";
 
 const Login = () => {
   const route = useRouter();
@@ -53,8 +54,9 @@ const Login = () => {
       <div className="relative  z-10 text-center bg-gray-180 p-6 border rounded-xl ">
         <h2 className="text-3xl font-bold mb-2 text-cyan-400">Sign In</h2>
         {/* <p className="text-gray-400 mb-6 flex items-center gap-1"> */}
-        <span className=" text-lg text-center text-gray-200 mb-6">
-          👤 Sign Into Your Account
+        <span className="text-lg text-center text-gray-200 mb-6 flex items-center justify-center">
+          <FaUserTie className="text-white mr-2" size={16} />
+          Sign Into Your Account
         </span>
         {/* </p> */}
         <form onSubmit={onSubmit} className="w-full max-w-sm  p-6 rounded-lg ">
@@ -63,19 +65,19 @@ const Login = () => {
             name="email"
             required
             placeholder="Email Address"
-            className="w-full p-3 mb-3 border  rounded  text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 mb-3 border  rounded  focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="password"
             name="password"
             required
             placeholder="Password"
-            className="w-full p-3 mb-3 border  rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 mb-3 border  rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-cyan-700 hover:bg-cyan-600 text-white font-semibold py-3 rounded transition disabled:bg-gray-600"
+            className="w-full bg-cyan-700 hover:bg-cyan-600 text-white font-semibold py-3 rounded"
           >
             {loading ? "Loading..." : "Login"}
           </button>

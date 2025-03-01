@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
+import { FaUserTie } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -39,7 +40,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="bg-gray-800 text-white p-6 shadow-md">
+      <nav className="bg-gray-800 text-white p-6 shadow-md sticky top-0 z-50">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <Link
@@ -50,7 +51,6 @@ const Navbar: React.FC = () => {
             <span>DevConnector</span>
           </Link>
 
-          {/* Navigation Links */}
           <ul className="flex items-center space-x-6">
             <li>
               <Link
@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
               <>
                 <li>
                   <Link
-                    href="/post"
+                    href="/posts"
                     className="hover:text-cyan-400 transition duration-300"
                   >
                     Posts
@@ -95,7 +95,8 @@ const Navbar: React.FC = () => {
                     href="/dashboard"
                     className="hover:text-cyan-400 transition duration-300 flex items-center"
                   >
-                    👤 Dashboard
+                    <FaUserTie className="text-white mr-2" size={16} />{" "}
+                    Dashboard
                   </Link>
                 </li>
                 <li>
