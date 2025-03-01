@@ -146,7 +146,7 @@ function Dashboard() {
                 ) : (
                   <p>No education added</p>
                 )}
-                <button className="py-2 px-4 bg-[#ff1f1f] text-white flex items-center gap-2 rounded-[4px]">
+                <button className="py-2 px-4 mt-4 bg-[#ff1f1f] text-white flex items-center gap-2 rounded-[4px]">
                   <FaUserMinus /> Delete My Account
                 </button>
               </div>
